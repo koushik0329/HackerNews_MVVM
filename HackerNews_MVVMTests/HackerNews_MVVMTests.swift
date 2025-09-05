@@ -10,27 +10,78 @@ import XCTest
 
 final class HackerNews_MVVMTests: XCTestCase {
 
+    var loginViewModel: LoginViewModel!
+    var homeViewModel: HomeScreenViewModel!
+    var detailsViewModel: DetailsViewModel!
+    
     override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+        try super.setUpWithError()
+        loginViewModel = LoginViewModel()
+        homeViewModel = HomeScreenViewModel()
+        detailsViewModel = DetailsViewModel()
     }
 
     override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+        loginViewModel = nil
+        try super.tearDownWithError()
+    }
+    
+    // MARK: - Email Validation Tests
+    func testValidEmail() throws {
+        let result = loginViewModel.validateLoginEmail(email: "test@gmail.com")
+        XCTAssertEqual(result, true)
+    }
+    
+    func testInvalidEmailWithoutGmail() throws {
+        let result = loginViewModel.validateLoginEmail(email: "test@yahom")
+        XCTAssertEqual(result, false)
+    }
+    
+    func testInvalidEmailTooShort() throws {
+        let result = loginViewModel.validateLoginEmail(email: "a@gmail")
+        XCTAssertEqual(result, false)
+    }
+    
+    // MARK: - Password Validation Tests
+    func testValidPassword() throws {
+        let result = loginViewModel.validateLoginPassword(password: "strongPass1")
+        XCTAssertEqual(result, true)
+    }
+    
+    func testInvalidPasswordTooShort() throws {
+        let result = loginViewModel.validateLoginPassword(password: "123")
+        XCTAssertEqual(result, false)
+    }
+    
+    func testNilPassword() throws {
+        let result = loginViewModel.validateLoginPassword(password: nil)
+        XCTAssertEqual(result, false)
+    }
+    
+    // MARK: - HomeScreenViewModel Tests
+    func testNewsListCount() throws {
+        let count = homeViewModel.getNewsListCount()
+        XCTAssertEqual(count, 6)
     }
 
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
+    func testGetNewsAtValidIndex() throws {
+        let news = homeViewModel.getNews(at: 0)
+        XCTAssertNotNil(news, "News should not be nil at valid index")
+        XCTAssertEqual(news?.id, "1")
+        XCTAssertEqual(news?.title, "Show HN: Draw a fish and watch it swim with the others")
+    }
+    
+    // MARK: - DetailsViewModel Tests (Title only)
+    func testDetailsViewModelWithConfiguredNews_Title() throws {
+        let sampleNews = News(id: "6", title: "Google shifts goo.gl policy: Inactive links deactivated, active links preserved", num_comments: 151, points: 204, url: nil, author: "shuuji3", created_at: "11 hours ago")
+        
+        detailsViewModel.configure(with: sampleNews)
+        
+        XCTAssertEqual(detailsViewModel.getTitle(), "Google shifts goo.gl policy: Inactive links deactivated, active links preserved")
     }
 
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
+    func testDetailsViewModelWithoutConfiguredNews_Title() throws {
+        XCTAssertEqual(detailsViewModel.getTitle(), "No Title")
     }
 
 }

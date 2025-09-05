@@ -137,7 +137,7 @@ class LoginViewController: UIViewController {
         let password = passwordTextField.text ?? ""
         
         if !loginViewModel.validateLoginEmail(email: email) || !loginViewModel.validateLoginPassword(password: password) {
-            return 
+            return
         }
         
         loginViewModel.credentials = User(email: email, password: password)
@@ -146,8 +146,14 @@ class LoginViewController: UIViewController {
     }
     
     func navigateToHome() {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let vc = storyboard.instantiateViewController(withIdentifier: "HomeScreenViewController")
-        self.present(vc, animated: true, completion: nil)
+        // Create HomeScreenViewController programmatically instead of using storyboard
+        let homeVC = HomeScreenViewController()
+        let navigationController = UINavigationController(rootViewController: homeVC)
+        
+        // Make it full screen
+        navigationController.modalPresentationStyle = .fullScreen
+        
+        // Present the navigation controller
+        self.present(navigationController, animated: true, completion: nil)
     }
 }

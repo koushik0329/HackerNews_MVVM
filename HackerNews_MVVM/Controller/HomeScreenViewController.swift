@@ -46,6 +46,17 @@ extension HomeScreenViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return viewModel.getNewsHeight()
     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        
+        guard let selectedNews = viewModel.getNews(at: indexPath.row) else { return }
+        
+        let detailsVC = DetailsViewController()
+        detailsVC.configure(with: selectedNews)
+        
+        navigationController?.pushViewController(detailsVC, animated: true)
+    }
 }
 
 // MARK: - UI Setup
@@ -77,6 +88,8 @@ extension HomeScreenViewController {
         newsTable.delegate = self
         newsTable.dataSource = self
         newsTable.register(NewsTableViewCell.self, forCellReuseIdentifier: "NewsCell")
+        newsTable.isUserInteractionEnabled = true
+        newsTable.allowsSelection = true
         
         view.addSubview(newsTable)
         
