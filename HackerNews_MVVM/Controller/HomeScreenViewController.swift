@@ -20,6 +20,12 @@ class HomeScreenViewController: UIViewController {
         super.viewDidLoad()
         setupUI()
         setupTable()
+        
+        viewModel.getDataFromServer { [weak self] in
+                DispatchQueue.main.async {
+                    self?.newsTable.reloadData()
+                }
+            }
     }
 }
 
@@ -51,7 +57,6 @@ extension HomeScreenViewController: UITableViewDelegate, UITableViewDataSource {
         tableView.deselectRow(at: indexPath, animated: true)
         
         guard let selectedNews = viewModel.getNews(at: indexPath.row) else { return }
-        
         let detailsVC = DetailsViewController()
         detailsVC.configure(with: selectedNews)
         

@@ -5,7 +5,11 @@
 //  Created by Koushik Reddy Kambham on 9/4/25.
 //
 
-struct News {
+struct NewsList: Codable {
+    var hits: [News]?
+}
+
+struct News: Codable {
     let id: String?
     let title: String?
     let num_comments: Int?

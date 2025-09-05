@@ -146,14 +146,10 @@ class LoginViewController: UIViewController {
     }
     
     func navigateToHome() {
-        // Create HomeScreenViewController programmatically instead of using storyboard
+
         let homeVC = HomeScreenViewController()
         let navigationController = UINavigationController(rootViewController: homeVC)
-        
-        // Make it full screen
         navigationController.modalPresentationStyle = .fullScreen
-        
-        // Present the navigation controller
         self.present(navigationController, animated: true, completion: nil)
     }
 }
