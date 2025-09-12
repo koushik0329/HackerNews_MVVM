@@ -21,12 +21,24 @@ class HomeScreenViewController: UIViewController {
         setupUI()
         setupTable()
         
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Go Back", style: .plain, target: self, action: #selector(handleBackButton))
+        
+        
         viewModel.getDataFromServer { [weak self] in
                 DispatchQueue.main.async {
                     self?.newsTable.reloadData()
                 }
             }
     }
+    
+    @objc func handleBackButton() {
+        if let nav = navigationController {
+            nav.popViewController(animated: true)
+        } else {
+            dismiss(animated: true, completion: nil)
+        }
+    }
+
 }
 
 // MARK: - TableView DataSource & Delegate

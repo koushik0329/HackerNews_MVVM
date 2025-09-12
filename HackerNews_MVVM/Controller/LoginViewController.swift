@@ -146,10 +146,8 @@ class LoginViewController: UIViewController {
     }
     
     func navigateToHome() {
-
         let homeVC = HomeScreenViewController()
-        let navigationController = UINavigationController(rootViewController: homeVC)
-        navigationController.modalPresentationStyle = .fullScreen
-        self.present(navigationController, animated: true, completion: nil)
+        navigationController?.pushViewController(homeVC, animated: true)
     }
+
 }
